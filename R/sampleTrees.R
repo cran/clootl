@@ -10,12 +10,18 @@ utils::globalVariables(c("clootl_data"))
 #' @param taxonomy_year The eBird taxonomy year the tree should be output in. Current options
 #' include 2021, 2022, and 2023. Both numeric and character inputs are acceptable here. Any value
 #' aside from these years will result in an error. Default is set 2023.
-#' @param data_path Default to `FALSE`, it will look for a path containing the bird tree.
-#' If the tree has been downloaded using [get_avesdata_repo()], it will read the tree file corresponding
-#' to the `version` and `taxonomy_year` provided and load it as a `phylo` object.
+#' @param data_path Default to FALSE. If a summary, dated tree is desired, this is sufficient
+#' and does not need to be modified. However, if a user wishes to extract a set of complete
+#' dated trees, for example to iterate an analysis across a cloud of trees, or to use an
+#' older version of the tree than the current one packed in the data object, this function
+#' can also accept a path to the downloaded set of trees. If you have already downloaded the AvesData repo
+#' available at https://github.com/McTavishLab/AvesData use data_path= the path to the download location.
+#' Alternately, you can download the full data repo using [get_avesdata_repo()]. This approach will download the data and
+#' set an environmental variable AVESDATA_PATH. When AVESDATA_PATH is set, the data_path will default to this value.
+#' To manually set AVESDATA_PATH to the location of your downloaded AvesData repo use [set_avesdata_repo_path()]
 #' @param version The desired version of the tree. Default to the most recent
-#' version of the tree. Other versions available are '1.2','1.3','1.4', and can be passed as
-#' a character string or as numeric.
+#' version of the tree. Other versions available are '0.1','1.0','1.2','1.3','1.4' and can be 
+#' passed as a character string or as numeric.
 #' @param count Work in progress, can only sample 100 for now. Eventually: The desired number of sampled trees.
 #'
 #' @details This function first ensures that the requested output species overlap with species-level
@@ -45,8 +51,8 @@ utils::globalVariables(c("clootl_data"))
 #'  }
 sampleTrees <- function(species="all_species",
                         label_type="scientific",
-                        taxonomy_year=2023,
-                        version="1.4",
+                        taxonomy_year=2024,
+                        version="1.5",
                         count=100,
                         data_path=FALSE)
 {
@@ -130,7 +136,12 @@ sampleTrees <- function(species="all_species",
                                as.character(taxonomy_year),
                                "/dated_rand_sample_clements.tre",
                                sep='')
+    if (!file.exists(sample_tree_filename)){
+      stop("Tree set file:", sample_tree_filename,
+        " is not found. This version may not be available for this taxonomy year or you may need to update your AvesData repo using get_avesdata_repo(overwrite=TRUE)")
+    } else {
     fullTreeSet <- read.tree(sample_tree_filename,skip=1)
+  }
   #now prune the tree and extract. if species is the full set, no pruning will occur
   pruned <- dropTipMultiPhylo(fullTreeSet, setdiff(fullTreeSet[[1]]$tip.label, species))
   pruned
