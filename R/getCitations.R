@@ -54,48 +54,46 @@ utils::globalVariables(c("clootl_data"))
 #' @examples
 #'\donttest{#pull the taxonomy file out
 #' data(clootl_data)
-#' tax <- clootl_data$taxonomy.files$Year2021
+#' tax <- clootl_data$taxonomies$year2025
 #' ls(tax)
-#' #subset to species only
-#' # TODO: this step seems no longer necessary, is it??
-#' # tax <- tax[tax$CATEGORY=="species",]
-#'
 #' #simulate extracting a tree for a particular family
 #' temp <- tax[tax$FAMILY=="Rhinocryptidae (Tapaculos)",]
 #' spp <- temp$SCI_NAME
 #'
 #' #get your tree
 #' prunedTree <- extractTree(species=spp, label_type="scientific",
-#'    taxonomy_year=2021, version="1.5")
+#'    taxonomy_year=2025, version="1.6")
 #'
 #' #get your citation DF
-#'  yourCitations <- getCitations(tree=prunedTree)}
-getCitations <- function(tree, version="1.5", data_path=FALSE) {##ToDO not hardcode?
+#' yourCitations <- getCitations(tree=prunedTree)}
+getCitations <- function(tree, version=1.6, data_path=FALSE) {##ToDO not hardcode?
   #pull the node labels out. count any (character instances of) NA, as this should
   #be the contribution of taxonomic additions and drop any NAs
   nodesToQuery <- tree$node.label
   taxonomyNodes <- sum(nodesToQuery == "NA")
   nodesToQuery <- nodesToQuery[nodesToQuery != "NA"]
 
-  if (data_path==FALSE){
-    data_path = Sys.getenv('AVESDATA_PATH')
-  }
-
-  if (!file.exists(data_path) & version != "1.5"){##ToDO not hardcode?
-    stop("GetCitations for anything other than the current tree requires an Aves Data download.
-      Currently get citations needs you to run get_avesdata_repo() first
-      or provide a path to the data repo using data_path=")
-    }
-
   if (!is.element(version, clootl_data$versions)){
     stop("version not recognized: ", version)
   }
 
-  if (data_path == ""){
-    utils::data("clootl_data")
-    all_nodes <- clootl_data$trees$`Aves_1.5`$annotations ##ToDO not hardcode?
-  } else{
+  if (data_path==FALSE){
+          data_path = Sys.getenv('AVESDATA_PATH')
+      }
+
+  if (version == 1.6){ ##not hardcode
+      utils::data("clootl_data")
+      all_nodes <- clootl_data$trees$`Aves_1.6`$annotations ##ToDO not hardcode?
+  } 
+  else if (!file.exists(data_path)){##ToDO not hardcode?
+    stop("GetCitations for anything other than the current tree requires an Aves Data download.
+      Currently get citations needs you to run get_avesdata_repo() first
+      or provide a path to the data repo using data_path=")
+    }
+  else{
+      message("Using data download for annotations in")
       filename <- paste(data_path, '/Tree_versions/Aves_', version, '/OpenTreeSynth/annotated_supertree/annotations.json', sep='')
+      message(filename)
       if (!file.exists(filename)){
           stop("annotations file not found at: ", filename)
           }
@@ -111,6 +109,9 @@ getCitations <- function(tree, version="1.5", data_path=FALSE) {##ToDO not hardc
     node_studies <- (unique(sub("@.*", "", node_trees)))
     studies <-c(node_studies, studies)
   }
+  if (length(studies) <= 1) {
+      stop("Error: no studies found")
+      }
 
   ## So this just lists all the trees, and all the studies...
   finalCounts <- as.data.frame(table(studies))
