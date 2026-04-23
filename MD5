@@ -1,11 +1,11 @@
-a735f7897f621c9f66e7e1ded8b4e40c *DESCRIPTION
+cd8d74a2d02ef20fb948bf211702bd38 *DESCRIPTION
 db82fc13c1f1cbe97ff083c8c63ff84f *NAMESPACE
-c38f0e68134f5209347e6d74b978809a *NEWS.md
+75a29925fa9b80d3bcf44570d17e8172 *NEWS.md
 ea313d68954812268af1abdcfa69abdf *R/data.R
 257262cadeb46f4b4df643a124bda549 *R/extractTree.R
 de523bea75c333d692fe6c785d6b4524 *R/getCitations.R
 fb0922d6c5468f1a44cddf6a6dd309a3 *R/sampleTrees.R
-f0b29d60b8812d98ed7213507949fe35 *R/utils.R
+4a0a6fb7fd478b6b322ea2abe511409a *R/utils.R
 44212e4993edb7fb3f2b6733de149a0e *R/zzz.R
 bb16ab420ff2ca6f71310ab40e51b4e3 *README.md
 97ad225611a5e38f2e4ab8565bcd7843 *data/clootl_data.rda
@@ -16,8 +16,8 @@ bbf9b0bf1d22902204138d0fd211e91f *man/getCitations.Rd
 c84329c0ca4772a922d0eef877588cb1 *man/get_avesdata_repo.Rd
 617d7c03ba7302dca4fb5a5a4912d839 *man/get_avesdata_repo_path.Rd
 45d62e9cd0011f76b8bc4c4f8c9d459f *man/sampleTrees.Rd
-ce6c08644b47eb86cffa6a8cfef7e6fe *man/set_avesdata_repo_path.Rd
+058ad48eba6dd32df490db232c8c25d8 *man/set_avesdata_repo_path.Rd
 b1e8132bb01d7df33bed2ea1301036fa *man/taxonomyGet.Rd
 0f77dea4777e55623051d17dfeb1fb0f *man/treeGet.Rd
 223067014125dfce7d9c67ca2dd44974 *tests/testthat.R
-ed89d3c2a7891e1a210607f01f6c9d26 *tests/testthat/test_basics.R
+a415062954aa8bc709e88e93fbed728a *tests/testthat/test_basics.R
